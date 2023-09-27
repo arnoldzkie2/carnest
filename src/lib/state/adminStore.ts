@@ -468,121 +468,29 @@ const useAdminStore = create<AdminType>((set, get) => ({
     transactions: [],
     getTransactions: async () => {
 
-        setTimeout(() => {
+        try {
 
-            set({transactions: [
-                {
-                  "operator_id": 123,
-                  "user_id": 456,
-                  "pickup_date": "2023-09-22",
-                  "pickup_time": "10:00 AM",
-                  "duration": 3,
-                  "return_date": "2023-09-25",
-                  "total_price": 250.00,
-                  "status": 1,
-                  "pickup_location": "Airport",
-                  "id": 1,
-                  "car_info": {
-                    "car_brand": "Toyota",
-                    "car_name": "Camry",
-                    "id": "ABC123",
-                    "fuel_type": "Gasoline",
-                    "transmission": "Automatic",
-                    "car_seats": 5,
-                    "car_type": "Sedan",
-                    "plate_number": "XYZ789",
-                    "location": "Car Rental Co.",
-                    "images": ["image1.jpg", "image2.jpg"],
-                    "price": 50.00,
-                    "year": "2022",
-                    "operator_id": 123,
-                    "reserved": false
-                  }
-                },
-                {
-                  "operator_id": 234,
-                  "user_id": 789,
-                  "pickup_date": "2023-09-23",
-                  "pickup_time": "11:30 AM",
-                  "duration": 2,
-                  "return_date": "2023-09-25",
-                  "total_price": 180.00,
-                  "status": 2,
-                  "pickup_location": "Downtown",
-                  "id": 2,
-                  "car_info": {
-                    "car_brand": "Honda",
-                    "car_name": "Civic",
-                    "id": 789,
-                    "fuel_type": "Hybrid",
-                    "transmission": "Automatic",
-                    "car_seats": 4,
-                    "car_type": "Compact",
-                    "plate_number": "LMN456",
-                    "location": "City Rentals",
-                    "images": ["image3.jpg", "image4.jpg"],
-                    "price": 45.00,
-                    "year": "2021",
-                    "operator_id": 456,
-                    "reserved": true
-                  }
-                },
-                {
-                  "operator_id": 789,
-                  "user_id": 101,
-                  "pickup_date": "2023-09-24",
-                  "pickup_time": "2:00 PM",
-                  "duration": 4,
-                  "return_date": "2023-09-28",
-                  "total_price": 320.00,
-                  "status": 1,
-                  "pickup_location": "City Center",
-                  "id": 3,
-                  "car_info": {
-                    "car_brand": "Ford",
-                    "car_name": "Focus",
-                    "id": "XYZ789",
-                    "fuel_type": "Gasoline",
-                    "transmission": "Automatic",
-                    "car_seats": 5,
-                    "car_type": "Hatchback",
-                    "plate_number": "PQR123",
-                    "location": "Downtown Rentals",
-                    "images": ["image5.jpg", "image6.jpg"],
-                    "price": 80.00,
-                    "year": "2023",
-                    "operator_id": 789,
-                    "reserved": false
-                  }
+            const { getAdminToken } = get()
+
+            const admin = getAdminToken()
+
+            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/booking`, {
+                headers: {
+                    Authorization: admin?.token
                 }
-              ]
-              })
+            })
 
-        }, 3000)
+            if (data.ok) {
 
-        // try {
+                set({ transactions: data.data })
 
-        //     const { getAdminToken } = get()
+            }
 
-        //     const admin = getAdminToken()
+        } catch (error) {
 
-        //     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/booking`, {
-        //         headers: {
-        //             Authorization: admin?.token
-        //         }
-        //     })
+            console.log(error);
 
-        //     if (data.ok) {
-
-        //         set({ transactions: data.data })
-
-        //     }
-
-        // } catch (error) {
-
-        //     console.log(error);
-
-        // }
+        }
 
     }
 

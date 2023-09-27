@@ -2,7 +2,7 @@
 'use client'
 import useAdminStore from '@/lib/state/adminStore'
 import useGlobalStore from '@/lib/state/globalStore'
-import { faEllipsis, faEye, faPenSquare, faSpinner, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faEllipsis, faEye, faPenSquare, faSpinner, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Image from 'next/image'
@@ -11,20 +11,20 @@ import React, { useEffect, useState } from 'react'
 
 const TransactionTable = () => {
 
-    const { selectedID, operation, currentPage, itemsPerPage, setCurrentPage, openOperation, closeOperation, isLoading, setIsLoading } = useGlobalStore()
+    const { selectedID, operation, currentPage, itemsPerPage, viewBooking, setCurrentPage, openOperation, closeOperation, isLoading, setIsLoading } = useGlobalStore()
 
     const { transactions, getAdminToken, getTransactions } = useAdminStore()
 
     const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    const [searchQuey, setSearchQuery] = useState('')
+    const [pending, setPending] = useState('')
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    // const searchedUser = transactions.filter(user => user.name.toUpperCase().includes(searchQuey.toUpperCase()))
+    const selectedTransaction = pending ? transactions.filter(book => book.status === Number(pending)) : transactions
 
-    const filteredTable = transactions.slice(startIndex, endIndex);
+    const filteredTable = selectedTransaction.slice(startIndex, endIndex);
 
     const totalPages = Math.ceil((transactions.length || 0) / itemsPerPage);
 
@@ -74,6 +74,39 @@ const TransactionTable = () => {
 
     }
 
+    const cancelBooking = async (e: any, bookingID: number) => {
+
+        e.preventDefault()
+
+        try {
+
+            const admin = getAdminToken()
+
+            setIsLoading(true)
+
+            const { data } = await axios.delete(`/${process.env.NEXT_PUBLIC_API_URL}/api/v1/booking?id=${bookingID}`, {
+                headers: {
+                    Authorization: admin?.token
+                }
+            })
+
+            if (data.ok) {
+                setIsLoading(true)
+                alert('Success')
+            }
+
+        } catch (error) {
+
+            setIsLoading(false)
+
+            console.log(error);
+
+            alert('Something went wrong')
+
+        }
+
+    }
+
     useEffect(() => {
 
         getTransactions()
@@ -84,11 +117,15 @@ const TransactionTable = () => {
         <div className='pt-32 pb-10 px-5 h-screen sm:px-10 md:px-16 lg:px-24 xl:px-36 2xl:px-44 flex flex-col w-full items-center'>
             <div className='flex items-center w-full md:w-4/5'>
                 <Link href={'/admin/operator/'} className='bg-red-700 cursor-pointer hover:bg-red-500 text-white w-40 flex items-center justify-center py-2.5'>Operator</Link>
-                <input value={searchQuey} onChange={(e) => {
-                    setCurrentPage(1)
-                    setSearchQuery(e.target.value)
-                }} type="text" placeholder='Search Operator (name)' className='py-2.5 px-4 w-full border outline-none' />
-                <Link href={'/admin/user'} className='bg-red-700 cursor-pointer hover:bg-red-500 text-white w-40 flex items-center justify-center py-2.5'>User</Link>
+                <select value={String(pending)} className='w-full px-3 py-3' onChange={(e) => setPending(e.target.value)}>
+                    <option value="">All Transactions</option>
+                    <option value="0">Status: Canceled</option>
+                    <option value="1">Status: Pending</option>
+                    <option value="2">Status: Operator Pending</option>
+                    <option value="3">Status: Confirmed</option>
+                </select>
+                <Link href={'/admin/user/'} className='bg-red-700 cursor-pointer hover:bg-red-500 text-white w-40 flex items-center justify-center py-2.5'>User</Link>
+
             </div>
             <div className='flex flex-col w-full md:w-4/5 gap-5'>
                 <div className='w-full overflow-x-auto pb-28'>
@@ -133,9 +170,15 @@ const TransactionTable = () => {
                                             </div>
                                         </td>
                                         <td className='py-3 relative px-6'>
-                                            {transaction.status === 1 && <button onClick={(e) => approveBooking(e, transaction.id)} disabled={isLoading} className={`${isLoading ? 'bg-red-500' : 'bg-red-700 hover:bg-red-500'} text-white py-1.5 px-6 self-center rounded-3xl`}>
-                                                {isLoading ? <FontAwesomeIcon icon={faSpinner} className='animate-spin' width={16} height={16} /> : 'Confirm'}
-                                            </button>}  
+                                            <FontAwesomeIcon icon={faEllipsis} className='h-5 w-10 cursor-pointer text-black' onClick={() => openOperation(transaction.id)} />
+                                            <ul className={`${operation && selectedID === transaction.id ? 'block' : 'hidden'} absolute bg-white p-3 gap-1 z-20 w-24 shadow-lg border flex flex-col text-gray-600`}>
+                                                {transaction.status === 1 && <div onClick={(e) => approveBooking(e, transaction.id)} className='cursor-pointer flex items-center justify-between hover:text-blue-600 text-left'>
+                                                    Confirm   <FontAwesomeIcon icon={faCheck} />
+                                                </div>}
+                                                {!isLoading && < button onClick={() => viewBooking(transaction)} className='flex mb-1 justify-between items-center cursor-pointer hover:text-green-500'>View <FontAwesomeIcon icon={faEye} /></button>}
+                                                <button disabled={isLoading} onClick={(e: any) => cancelBooking(e, transaction.id)} className='flex mb-1 justify-between items-center cursor-pointer hover:text-red-600'>{isLoading ? <FontAwesomeIcon icon={faSpinner} className='animate-spin' /> : 'Cancel'} {!isLoading && <FontAwesomeIcon icon={faTrashCan} />}</button>
+                                                <li className='flex mb-1 justify-between items-center cursor-pointer hover:text-black pt-2 border-t border-r-gray-700' onClick={closeOperation}>Close <FontAwesomeIcon icon={faXmark} /></li>
+                                            </ul>
                                         </td>
                                     </tr>
                                 )) :

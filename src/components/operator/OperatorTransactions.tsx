@@ -14,7 +14,7 @@ const OperatorTranscactions = () => {
 
     const [booking, setBooking] = useState<Booking[]>([])
 
-    const { operation, selectedID, openOperation, closeOperation, isLoading, setIsLoading, itemsPerPage, currentPage,setCurrentPage } = useGlobalStore()
+    const { operation, selectedID, openOperation, viewBooking, closeOperation, isLoading, setIsLoading, itemsPerPage, currentPage, setCurrentPage } = useGlobalStore()
 
     const skeleton = [1, 2, 3, 4, 5]
 
@@ -134,7 +134,7 @@ const OperatorTranscactions = () => {
     useEffect(() => {
 
         getBookings()
-        
+
     }, [])
 
     return (
@@ -204,7 +204,7 @@ const OperatorTranscactions = () => {
                                         <td className='py-3 relative px-6'>
                                             <FontAwesomeIcon icon={faEllipsis} className='h-5 w-10 cursor-pointer text-black' onClick={() => openOperation(transac.id)} />
                                             <ul className={`${operation && selectedID === transac.id ? 'block' : 'hidden'} absolute bg-white p-3 gap-1 z-20 w-24 shadow-lg border flex flex-col text-gray-600`}>
-                                                <Link href={`/user/transactions/${transac.id}`} className='flex mb-1 justify-between items-center cursor-pointer hover:text-green-500'>View <FontAwesomeIcon icon={faEye} /></Link>
+                                                <button onClick={() => viewBooking(transac)} className='flex mb-1 justify-between items-center cursor-pointer hover:text-green-500'>View <FontAwesomeIcon icon={faEye} /></button>
                                                 <button disabled={isLoading} onClick={(e: any) => cancelBooking(e, transac.id)} className='flex mb-1 justify-between items-center cursor-pointer hover:text-red-600'>{isLoading ? <FontAwesomeIcon icon={faSpinner} className='animate-spin' /> : 'Cancel'} {!isLoading && <FontAwesomeIcon icon={faTrashCan} />}</button>
                                                 <li className='flex mb-1 justify-between items-center cursor-pointer hover:text-black pt-2 border-t border-r-gray-700' onClick={closeOperation}>Close <FontAwesomeIcon icon={faXmark} /></li>
                                             </ul>

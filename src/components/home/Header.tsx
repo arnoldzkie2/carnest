@@ -32,7 +32,7 @@ const Header = () => {
         </Link>
         <Link href='/login/operator' className={`lg:ml-auto rounded-2xl cursor-pointer hover:text-red-700`}>Login as Operator</Link>
         <Link href='/signup/operator' className={`rounded-2xl cursor-pointer hover:text-red-700`}>Apply as Operator</Link>
-        <Link href='/booking' className={`rounded-2xl cursor-pointer hover:text-red-700`}>Book Now</Link>
+        <Link href='/login/user' className={`rounded-2xl cursor-pointer hover:text-red-700`}>Book Now</Link>
         <div className={`${isOpen ? 'mt-5' : ''} flex items-center gap-8  lg:ml-auto`}>
           <Link href='/login/user' className={`hover:bg-red-500 border px-7 py-1.5 cursor-pointer flex items-center justify-center rounded-3xl bg-red-700 text-white`}>Login</Link>
           <Link href='/signup/user' className={`hover:bg-red-500 hover:text-white border px-7 py-1.5 cursor-pointer flex items-center justify-center rounded-3xl bg-white text-red-700`}>SignUp</Link>

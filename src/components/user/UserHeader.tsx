@@ -47,9 +47,9 @@ const UserHeader = () => {
           CARNEST
         </Link>
         <Link href='/user' className={`lg:ml-auto rounded-2xl cursor-pointer hover:text-red-700`}>Dashboard</Link>
-        <Link href='/booking' className={`rounded-2xl cursor-pointer hover:text-red-700`}>Book Now</Link>
+        <Link href='/user/booking' className={`rounded-2xl cursor-pointer hover:text-red-700`}>Book Now</Link>
         <div className={`${isOpen ? 'mt-5' : ''} flex items-center gap-5  lg:ml-auto`}>
-          <Link href={'/user/profile'} className='flex items-center gap-2 border px-3 py-1'>
+          <Link href={'/user/profile'} className='flex items-center gap-2 border px-3 py-1 hover:bg-slate-100'>
             <h1>{user?.name}</h1>
             <Image
               src={user?.profile ? user.profile : '/default-profile.png'}

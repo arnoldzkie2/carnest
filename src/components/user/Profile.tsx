@@ -106,7 +106,7 @@ const Profile = () => {
                         />
                     </div>
                     <div className='flex flex-col gap-3 w-full items-start'>
-                        <h1 className='text-xl text-red-700 border-b pb-2'>Profile</h1>
+                        <h1 className='text-xl text-red-700 border-b pb-2 hidden md:flex'>Profile</h1>
                         <UploadButton
                             endpoint="userProfile"
                             onClientUploadComplete={(res) => {

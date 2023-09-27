@@ -12,7 +12,7 @@ export const ourFileRouter = {
 
         }),
 
-    carImage: f({ image: { maxFileSize: "8MB", maxFileCount: 5 } })
+    carImage: f({ image: { maxFileSize: "8MB", maxFileCount: 10 } })
 
         .onUploadComplete(async ({ file }) => {
 

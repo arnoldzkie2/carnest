@@ -73,7 +73,7 @@ const OperatorCars = () => {
 
     return (
         <div className='py-24 px-5 h-screen sm:px-10 md:px-16 lg:px-24 xl:px-36 2xl:px-44 flex flex-col w-full justify-center items-center'>
-            <div className='flex items-center w-full md:w-4/5 pr-10'>
+            <div className='flex items-center w-full md:w-4/5'>
                 <input value={searchQuey} onChange={(e) => {
                     setCurrentPage(1)
                     setSearchQuery(e.target.value)
@@ -81,7 +81,7 @@ const OperatorCars = () => {
                 <Link href={'/operator/newcar'} className='bg-red-700 hover:bg-red-500 text-white w-40 flex items-center justify-center py-2.5'>Add Car</Link>
             </div>
             <div className='flex flex-col w-full md:w-4/5 gap-5'>
-                <div className='w-full overflow-x-auto pb-28 pr-10'>
+                <div className='w-full overflow-x-auto pb-28'>
                     <table className="text-sm text-left text-gray-800 shadow-md w-full">
                         <thead className="text-xs uppercase bg-slate-100 border">
                             <tr>

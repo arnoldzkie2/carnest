@@ -12,7 +12,6 @@ interface Operator {
     mobile: string
     image_id: string
     address: string;
-
 }
 
 export type { Operator }
@@ -40,7 +39,7 @@ const useOperatorStore = create<OperatorStoreType>((set, get) => ({
         email: 'arnoldzkie22@gmail.com',
         status: 'verified',
         profile: '',
-        image_id: '',
+        image_id: '/ID.jpg',
         address: 'Philippines test',
     },
     cars: [],
