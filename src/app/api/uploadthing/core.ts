@@ -7,17 +7,11 @@ export const ourFileRouter = {
     userProfile: f({ image: { maxFileSize: "8MB" } })
 
         .onUploadComplete(async ({ file }) => {
-
             console.log(file);
-
         }),
 
     carImage: f({ image: { maxFileSize: "8MB", maxFileCount: 10 } })
-
         .onUploadComplete(async ({ file }) => {
-
-            console.log(file);
-
         }),
 
 } satisfies FileRouter;
